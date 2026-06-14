@@ -83,7 +83,7 @@ def main():
     # Check if node_modules exists
     if not os.path.exists(os.path.join(frontend_dir, "node_modules")):
         print("Frontend dependencies (node_modules) not found. Running npm install...")
-        subprocess.run("npm install", shell=True, cwd=frontend_dir)
+        subprocess.run("npm install --legacy-peer-deps", shell=True, cwd=frontend_dir)
 
     frontend_process = subprocess.Popen(
         "npm run dev",
