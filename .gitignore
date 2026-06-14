@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.db
+.pytest_cache/
+
+# Node
+node_modules/
+.next/
+out/
+build/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Data / Outputs (optional, but keep outputs folder structure)
+data/chroma_db/
