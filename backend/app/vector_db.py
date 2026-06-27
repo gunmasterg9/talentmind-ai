@@ -67,22 +67,39 @@ class VectorDB:
                 self.collection = None
 
     def add_candidate(self, candidate_id: str, profile_text: str, metadata: dict = None):
-        embedding = embedder.get_embedding(profile_text)
-        
+        self.add_candidates_batch([candidate_id], [profile_text], [metadata or {}])
+
+    def add_candidates_batch(self, candidate_ids: list, profile_texts: list, metadatas: list = None):
+        if not candidate_ids:
+            return
+        if metadatas is None:
+            metadatas = [{} for _ in candidate_ids]
+            
+        embeddings = []
+        if embedder.model:
+            try:
+                embeddings = embedder.model.encode(profile_texts).tolist()
+            except Exception as e:
+                logger.error(f"Batch embedding error: {e}")
+                embeddings = [embedder.get_embedding(t) for t in profile_texts]
+        else:
+            embeddings = [embedder.get_embedding(t) for t in profile_texts]
+
         if self.collection:
             try:
                 self.collection.upsert(
-                    ids=[candidate_id],
-                    embeddings=[embedding],
-                    documents=[profile_text],
-                    metadatas=[metadata or {}]
+                    ids=candidate_ids,
+                    embeddings=embeddings,
+                    documents=profile_texts,
+                    metadatas=metadatas
                 )
                 return
             except Exception as e:
-                logger.error(f"ChromaDB upsert error: {e}")
-        
+                logger.error(f"ChromaDB batch upsert error: {e}")
+
         # Fallback mock store
-        self.mock_store[candidate_id] = (embedding, profile_text, metadata or {})
+        for cid, emb, p_text, meta in zip(candidate_ids, embeddings, profile_texts, metadatas):
+            self.mock_store[cid] = (emb, p_text, meta)
 
     def search_candidates(self, query_text: str, top_n: int = 50) -> dict:
         query_emb = embedder.get_embedding(query_text)

@@ -9,6 +9,12 @@ import subprocess
 import time
 import signal
 import socket
+import shutil
+
+# Ensure Node.js and Python paths are in environment PATH
+nodejs_path = r"C:\Program Files\nodejs"
+if os.path.exists(nodejs_path) and nodejs_path not in os.environ.get("PATH", ""):
+    os.environ["PATH"] = nodejs_path + os.path.pathsep + os.environ.get("PATH", "")
 
 def is_port_open(port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -43,8 +49,13 @@ def main():
     frontend_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "frontend")
     data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
     
-    csv_path = os.path.join(data_dir, "sample_candidates.csv")
-    if not os.path.exists(csv_path):
+    candidates_json = os.path.join(data_dir, "candidates.json")
+    db_path = os.path.join(data_dir, "talentmind.db")
+    if os.path.exists(candidates_json) and not os.path.exists(db_path):
+        print("Found candidates.json dataset! Running batch importer...")
+        subprocess.run([sys.executable, os.path.join(data_dir, "import_jsonl.py"), candidates_json], check=True)
+        print("Candidates dataset import completed.")
+    elif not os.path.exists(db_path):
         print("Initial database seed not found. Running seed script...")
         subprocess.run([sys.executable, os.path.join(data_dir, "seed.py")], check=True)
         print("Database seeding completed.")
@@ -60,8 +71,8 @@ def main():
         bufsize=1
     )
 
-    # Wait for backend to be online
-    retries = 10
+    # Wait for backend to be online (models take time to load on startup)
+    retries = 60
     backend_ready = False
     while retries > 0:
         if is_port_open(8000):
@@ -80,13 +91,26 @@ def main():
     # 4. Start Next.js Frontend
     print("Starting Next.js Frontend (Port 3000)...")
     
+    # Find npm executable dynamically
+    npm_cmd = "npm"
+    possible_npms = [
+        "npm",
+        r"C:\Program Files\nodejs\npm.cmd",
+        r"C:\Program Files (x86)\nodejs\npm.cmd",
+        os.path.expanduser(r"~\AppData\Roaming\npm\npm.cmd")
+    ]
+    for n in possible_npms:
+        if shutil.which(n) or os.path.exists(n):
+            npm_cmd = f'"{n}"' if " " in n else n
+            break
+
     # Check if node_modules exists
     if not os.path.exists(os.path.join(frontend_dir, "node_modules")):
         print("Frontend dependencies (node_modules) not found. Running npm install...")
-        subprocess.run("npm install --legacy-peer-deps", shell=True, cwd=frontend_dir)
+        subprocess.run(f"{npm_cmd} install --legacy-peer-deps", shell=True, cwd=frontend_dir)
 
     frontend_process = subprocess.Popen(
-        "npm run dev",
+        f"{npm_cmd} run dev",
         shell=True,
         cwd=frontend_dir,
         stdout=subprocess.PIPE,
@@ -96,7 +120,7 @@ def main():
     )
 
     # Wait for frontend to be online
-    retries = 15
+    retries = 60
     frontend_ready = False
     while retries > 0:
         if is_port_open(3000):
@@ -112,10 +136,10 @@ def main():
         return
 
     print("\n" + "=" * 60)
-    print("🚀 TalentMind AI is running locally!")
+    print(" [SUCCESS] Redrob AI Platform is running locally!")
     print("=" * 60)
-    print("  🖥️ Recruiter UI:     http://localhost:3000")
-    print("  📡 Backend API Docs:  http://localhost:8000/docs")
+    print("  * Web UI:            http://localhost:3000")
+    print("  * Backend API Docs:  http://localhost:8000/docs")
     print("=" * 60)
     print("Press CTRL+C to terminate both processes.")
     print("=" * 60 + "\n")

@@ -3,7 +3,7 @@ version: '3.8'
 services:
   db:
     image: postgres:15-alpine
-    container_name: talentmind-db
+    container_name: redrob-db
     environment:
       POSTGRES_DB: talentmind
       POSTGRES_USER: postgres
@@ -18,11 +18,23 @@ services:
       timeout: 5s
       retries: 5
 
+  redis:
+    image: redis:7-alpine
+    container_name: redrob-redis
+    ports:
+      - "6379:6379"
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: redrob-qdrant
+    ports:
+      - "6333:6333"
+
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: talentmind-backend
+    container_name: redrob-backend
     volumes:
       - ./backend:/workspace
       - ./data:/workspace/data
@@ -30,20 +42,19 @@ services:
       - "8000:8000"
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/talentmind
-      - CHROMA_DB_PATH=/workspace/data/chroma_db
-      - EMBEDDING_MODEL_NAME=all-MiniLM-L6-v2
+      - REDIS_URL=redis://redis:6379
+      - QDRANT_URL=http://qdrant:6333
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_started
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: talentmind-frontend
-    volumes:
-      - ./frontend:/workspace
-      - /workspace/node_modules
+    container_name: redrob-frontend
     ports:
       - "3000:3000"
     environment:

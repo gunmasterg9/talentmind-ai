@@ -10,6 +10,7 @@ node_modules/
 .next/
 out/
 build/
+*.tsbuildinfo
 
 # IDE / OS
 .idea/
@@ -17,5 +18,7 @@ build/
 .DS_Store
 Thumbs.db
 
-# Data / Outputs (optional, but keep outputs folder structure)
+# Large Data & Outputs
 data/chroma_db/
+data/candidates.json
+backend/data/

@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TalentMind AI — Hackathon Submission Deck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── RESET ─────────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ─── VARIABLES ─────────────────────────────────────────────────────── */
+    :root {
+      --bg-dark:     #0a0d14;
+      --bg-card:     #111827;
+      --bg-card2:    #161e2e;
+      --accent1:     #6366f1;   /* indigo */
+      --accent2:     #8b5cf6;   /* violet */
+      --accent3:     #06b6d4;   /* cyan */
+      --accent4:     #10b981;   /* emerald */
+      --accent5:     #f59e0b;   /* amber */
+      --accent6:     #ef4444;   /* red */
+      --text-head:   #f9fafb;
+      --text-body:   #d1d5db;
+      --text-muted:  #6b7280;
+      --border:      rgba(255,255,255,0.08);
+      --gradient-h:  linear-gradient(135deg, var(--accent1), var(--accent2));
+      --gradient-c:  linear-gradient(135deg, var(--accent3), var(--accent4));
+      --slide-w:     794px;   /* A4-ish portrait */
+      --slide-h:     1123px;
+    }
+
+    /* ─── SCREEN WRAPPER ─────────────────────────────────────────────── */
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #05070d;
+      color: var(--text-body);
+      padding: 40px 0 80px;
+    }
+
+    .deck {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+    }
+
+    /* ─── PRINT: one slide per page ────────────────────────────────────── */
+    @media print {
+      body { padding: 0; background: #fff; }
+      .deck { gap: 0; }
+      .slide { page-break-after: always; border-radius: 0 !important; box-shadow: none !important; }
+      .no-print { display: none !important; }
+      @page { size: A4 portrait; margin: 0; }
+    }
+
+    /* ─── SLIDE BASE ────────────────────────────────────────────────────── */
+    .slide {
+      width: var(--slide-w);
+      min-height: var(--slide-h);
+      background: var(--bg-dark);
+      border-radius: 16px;
+      box-shadow: 0 0 60px rgba(99,102,241,0.15), 0 0 0 1px var(--border);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── TOP ACCENT BAR ─────────────────────────────────────────────── */
+    .slide-top-bar {
+      height: 5px;
+      background: var(--gradient-h);
+      flex-shrink: 0;
+    }
+    .slide-top-bar.cyan { background: var(--gradient-c); }
+    .slide-top-bar.amber { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+    .slide-top-bar.green { background: linear-gradient(135deg, #10b981, #06b6d4); }
+    .slide-top-bar.pink  { background: linear-gradient(135deg, #ec4899, #8b5cf6); }
+    .slide-top-bar.red   { background: linear-gradient(135deg, #ef4444, #f97316); }
+
+    /* ─── SLIDE CONTENT ─────────────────────────────────────────────── */
+    .slide-body {
+      padding: 52px 56px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── SLIDE NUMBER ──────────────────────────────────────────────── */
+    .slide-num {
+      position: absolute;
+      bottom: 24px;
+      right: 32px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    /* ─── LOGO BADGE ───────────────────────────────────────────────── */
+    .logo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(99,102,241,0.15);
+      border: 1px solid rgba(99,102,241,0.35);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent1);
+      margin-bottom: 28px;
+      width: fit-content;
+    }
+    .logo-badge .dot {
+      width: 8px; height: 8px;
+      background: var(--accent1);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    /* ─── HEADINGS ──────────────────────────────────────────────────── */
+    .slide-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--accent3);
+      margin-bottom: 10px;
+    }
+
+    h1.hero-title {
+      font-size: 52px;
+      font-weight: 900;
+      line-height: 1.1;
+      color: var(--text-head);
+      margin-bottom: 8px;
+    }
+    h1.hero-title span {
+      background: var(--gradient-h);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    h2.section-title {
+      font-size: 34px;
+      font-weight: 800;
+      color: var(--text-head);
+      line-height: 1.2;
+      margin-bottom: 28px;
+    }
+    h2.section-title span {
+      background: var(--gradient-h);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    h3.card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-head);
+      margin-bottom: 6px;
+    }
+
+    /* ─── HERO SUBTITLE ─────────────────────────────────────────────── */
+    .hero-subtitle {
+      font-size: 16px;
+      color: var(--text-body);
+      line-height: 1.7;
+      max-width: 560px;
+      margin-bottom: 40px;
+    }
+
+    /* ─── META TAGS (team / date) ───────────────────────────────────── */
+    .meta-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+    .meta-tag {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-card2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .meta-tag .icon { font-size: 16px; }
+    .meta-tag .label { color: var(--text-muted); margin-right: 4px; }
+
+    /* ─── FEATURE GRID ──────────────────────────────────────────────── */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: auto;
+    }
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px 24px;
+      transition: border-color .2s;
+    }
+    .feature-card:hover { border-color: rgba(99,102,241,0.4); }
+    .feature-card .f-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      margin-bottom: 12px;
+    }
+    .f-icon.indigo  { background: rgba(99,102,241,0.15); }
+    .f-icon.cyan    { background: rgba(6,182,212,0.15); }
+    .f-icon.emerald { background: rgba(16,185,129,0.15); }
+    .f-icon.amber   { background: rgba(245,158,11,0.15); }
+    .f-icon.violet  { background: rgba(139,92,246,0.15); }
+    .f-icon.pink    { background: rgba(236,72,153,0.15); }
+    .feature-card p { font-size: 13px; color: var(--text-body); line-height: 1.6; }
+
+    /* ─── PROBLEM POINTS ────────────────────────────────────────────── */
+    .problem-list { display: flex; flex-direction: column; gap: 18px; }
+    .problem-item {
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent6);
+      border-radius: 0 12px 12px 0;
+      padding: 18px 22px;
+    }
+    .problem-item .p-num {
+      font-size: 28px; font-weight: 900;
+      color: var(--accent6);
+      opacity: 0.5;
+      flex-shrink: 0;
+      line-height: 1;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .problem-item h4 { font-size: 14px; font-weight: 700; color: var(--text-head); margin-bottom: 4px; }
+    .problem-item p  { font-size: 13px; color: var(--text-body); line-height: 1.6; }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .stat-card {
+      background: var(--bg-card2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+      text-align: center;
+    }
+    .stat-card .stat-num {
+      font-size: 32px; font-weight: 900;
+      background: var(--gradient-h);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1;
+    }
+    .stat-card .stat-label { font-size: 11px; color: var(--text-muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* ─── SOLUTION PILLARS ──────────────────────────────────────────── */
+    .pillar-list { display: flex; flex-direction: column; gap: 20px; }
+    .pillar {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px 24px;
+    }
+    .pillar-icon {
+      width: 52px; height: 52px; flex-shrink: 0;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px;
+    }
+    .pillar h4 { font-size: 15px; font-weight: 700; color: var(--text-head); margin-bottom: 6px; }
+    .pillar p  { font-size: 13px; color: var(--text-body); line-height: 1.65; }
+    .tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+    .tag {
+      font-size: 11px; font-weight: 600; padding: 3px 10px;
+      border-radius: 100px;
+      border: 1px solid;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .tag.indigo  { color: var(--accent1); border-color: rgba(99,102,241,0.4);  background: rgba(99,102,241,0.1); }
+    .tag.cyan    { color: var(--accent3); border-color: rgba(6,182,212,0.4);   background: rgba(6,182,212,0.1); }
+    .tag.emerald { color: var(--accent4); border-color: rgba(16,185,129,0.4);  background: rgba(16,185,129,0.1); }
+    .tag.amber   { color: var(--accent5); border-color: rgba(245,158,11,0.4);  background: rgba(245,158,11,0.1); }
+    .tag.violet  { color: var(--accent2); border-color: rgba(139,92,246,0.4);  background: rgba(139,92,246,0.1); }
+    .tag.red     { color: var(--accent6); border-color: rgba(239,68,68,0.4);   background: rgba(239,68,68,0.1); }
+
+    /* ─── ARCHITECTURE ──────────────────────────────────────────────── */
+    .arch-diagram {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      margin-top: 8px;
+    }
+    .arch-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .arch-box {
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      flex: 1;
+      border: 1px solid;
+    }
+    .arch-box.ui    { background: rgba(99,102,241,0.12); border-color: rgba(99,102,241,0.4); color: #a5b4fc; }
+    .arch-box.api   { background: rgba(6,182,212,0.12);  border-color: rgba(6,182,212,0.4);  color: #67e8f9; }
+    .arch-box.ai    { background: rgba(139,92,246,0.12); border-color: rgba(139,92,246,0.4); color: #c4b5fd; }
+    .arch-box.db    { background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.4); color: #6ee7b7; }
+    .arch-box.store { background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.4); color: #fcd34d; }
+    .arch-arrow { font-size: 18px; color: var(--text-muted); flex-shrink: 0; }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .tech-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-card2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+    }
+    .tech-item .t-icon { font-size: 20px; flex-shrink: 0; }
+    .tech-item .t-name { font-size: 13px; font-weight: 600; color: var(--text-head); }
+    .tech-item .t-sub  { font-size: 11px; color: var(--text-muted); }
+
+    /* ─── SCORING FORMULA ───────────────────────────────────────────── */
+    .formula-box {
+      background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(139,92,246,0.08));
+      border: 1px solid rgba(99,102,241,0.3);
+      border-radius: 14px;
+      padding: 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #c4b5fd;
+      text-align: center;
+      margin-bottom: 24px;
+      line-height: 1.8;
+    }
+    .formula-highlight {
+      font-size: 14px;
+      font-weight: 700;
+      color: #a5b4fc;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .score-bars { display: flex; flex-direction: column; gap: 12px; }
+    .score-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .score-bar-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-body);
+      width: 160px;
+      flex-shrink: 0;
+    }
+    .score-bar-track {
+      flex: 1;
+      height: 8px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+    .score-bar-fill {
+      height: 100%;
+      border-radius: 100px;
+    }
+    .score-bar-pct {
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      width: 36px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* ─── RESULTS / DEMO ────────────────────────────────────────────── */
+    .result-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .result-table th {
+      background: rgba(99,102,241,0.12);
+      color: var(--accent1);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .result-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      color: var(--text-body);
+      vertical-align: middle;
+    }
+    .result-table tr:last-child td { border-bottom: none; }
+    .result-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      font-weight: 800;
+      font-size: 11px;
+    }
+    .rank-1 { background: rgba(245,158,11,0.25); color: #fcd34d; border: 1px solid rgba(245,158,11,0.4); }
+    .rank-2 { background: rgba(209,213,219,0.15); color: #d1d5db; border: 1px solid rgba(209,213,219,0.3); }
+    .rank-3 { background: rgba(251,146,60,0.15);  color: #fdba74; border: 1px solid rgba(251,146,60,0.3); }
+    .rank-n { background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--border); }
+    .score-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-weight: 700;
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .score-high   { background: rgba(16,185,129,0.15);  color: #6ee7b7; border: 1px solid rgba(16,185,129,0.3); }
+    .score-mid    { background: rgba(245,158,11,0.15);  color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); }
+    .score-low    { background: rgba(239,68,68,0.15);   color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); }
+    .rec-badge {
+      font-size: 10px; font-weight: 700; padding: 3px 9px;
+      border-radius: 100px; letter-spacing: 0.5px;
+    }
+    .rec-strong { background: rgba(16,185,129,0.15); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.3); }
+    .rec-consider{ background: rgba(245,158,11,0.15); color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); }
+    .rec-pass    { background: rgba(239,68,68,0.1);  color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); }
+
+    /* ─── IMPACT CARDS ──────────────────────────────────────────────── */
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .impact-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 20px;
+      text-align: center;
+    }
+    .impact-card .i-icon { font-size: 32px; margin-bottom: 12px; display: block; }
+    .impact-card .i-title { font-size: 14px; font-weight: 700; color: var(--text-head); margin-bottom: 8px; }
+    .impact-card .i-body  { font-size: 12px; color: var(--text-body); line-height: 1.6; }
+    .impact-card .i-num {
+      font-size: 36px; font-weight: 900; line-height: 1.1;
+      background: var(--gradient-h);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    /* ─── FLOW DIAGRAM ──────────────────────────────────────────────── */
+    .flow { display: flex; align-items: center; gap: 0; margin-top: 8px; flex-wrap: wrap; }
+    .flow-step {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+      text-align: center;
+      flex: 1; min-width: 100px;
+    }
+    .flow-step .f-num { font-size: 10px; color: var(--text-muted); font-weight: 700; letter-spacing: 1px; margin-bottom: 6px; text-transform: uppercase; }
+    .flow-step .f-name { font-size: 12px; font-weight: 700; color: var(--text-head); }
+    .flow-step .f-sub  { font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+    .flow-arrow { font-size: 20px; color: var(--text-muted); flex-shrink: 0; padding: 0 4px; }
+
+    /* ─── CTA / FINAL SLIDE ─────────────────────────────────────────── */
+    .cta-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      flex: 1;
+      gap: 24px;
+    }
+    .big-logo {
+      font-size: 64px;
+      font-weight: 900;
+      background: var(--gradient-h);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+    .repo-link {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      color: var(--accent3);
+      background: rgba(6,182,212,0.08);
+      border: 1px solid rgba(6,182,212,0.3);
+      padding: 10px 24px;
+      border-radius: 10px;
+    }
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 24px 0;
+    }
+
+    /* ─── PRINT BUTTON ──────────────────────────────────────────────── */
+    .print-btn {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      background: var(--gradient-h);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 12px 28px;
+      border-radius: 100px;
+      border: none;
+      cursor: pointer;
+      z-index: 999;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 24px rgba(99,102,241,0.4);
+      font-family: 'Inter', sans-serif;
+    }
+    .print-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    /* ─── SLIDE COUNTER ─────────────────────────────────────────────── */
+    .footer-bar {
+      border-top: 1px solid var(--border);
+      padding: 14px 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .footer-brand { font-size: 12px; font-weight: 700; color: var(--accent1); letter-spacing: 1px; }
+    .footer-tag   { font-size: 11px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">⬇ Save as PDF</button>
+
+<div class="deck">
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 1 — COVER
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-top-bar"></div>
+
+    <!-- BG glow -->
+    <div style="position:absolute;top:-100px;right:-100px;width:500px;height:500px;
+         background:radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%);
+         pointer-events:none;"></div>
+
+    <div class="slide-body">
+      <div class="logo-badge"><span class="dot"></span>Data &amp; AI Challenge 2026</div>
+
+      <h1 class="hero-title">Talent<span>Mind</span> AI</h1>
+      <h1 class="hero-title" style="font-size:32px;margin-bottom:20px;background:var(--gradient-c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+        Intelligent Candidate Discovery
+      </h1>
+
+      <p class="hero-subtitle">
+        A production-grade AI recruiting platform that goes beyond keyword matching —
+        semantically understanding job descriptions, integrating multi-signal behavioral data,
+        and delivering an expertly ranked shortlist with full explainability.
+      </p>
+
+      <div class="meta-row">
+        <div class="meta-tag">
+          <span class="icon">🏷️</span>
+          <span class="label">Team ID:</span>
+          <strong>TalentMind</strong>
+        </div>
+        <div class="meta-tag">
+          <span class="icon">📅</span>
+          <span class="label">Submission:</span>
+          <strong>June 14, 2026</strong>
+        </div>
+        <div class="meta-tag">
+          <span class="icon">🔗</span>
+          <span class="label">GitHub:</span>
+          <strong>gunmasterg9/talentmind-ai</strong>
+        </div>
+      </div>
+
+      <div class="feature-grid" style="margin-top:0;">
+        <div class="feature-card">
+          <div class="f-icon indigo">🧠</div>
+          <h3 class="card-title">Deep Job Understanding</h3>
+          <p>LangChain parser extracts structured requirements, skills, experience ranges, and domain context from free-text JDs.</p>
+        </div>
+        <div class="feature-card">
+          <div class="f-icon cyan">🎯</div>
+          <h3 class="card-title">Semantic Contextual Fit</h3>
+          <p>Sentence Transformers + ChromaDB vector similarity — sees beyond keywords to true semantic alignment.</p>
+        </div>
+        <div class="feature-card">
+          <div class="f-icon emerald">📊</div>
+          <h3 class="card-title">Multi-Signal Scoring</h3>
+          <p>6 weighted signals: semantic, experience, skills, industry, activity &amp; career growth — configurable by recruiter.</p>
+        </div>
+        <div class="feature-card">
+          <div class="f-icon amber">⚡</div>
+          <h3 class="card-title">Explainable AI Output</h3>
+          <p>Human-readable recruiter summaries with strengths, weaknesses, and hire/pass recommendation per candidate.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bar">
+      <span class="footer-brand">TALENTMIND AI</span>
+      <span class="footer-tag">Intelligent Candidate Discovery Platform</span>
+    </div>
+    <div class="slide-num">01 / 08</div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 2 — THE PROBLEM
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-top-bar red"></div>
+
+    <div class="slide-body">
+      <div class="slide-label">The Problem</div>
+      <h2 class="section-title">Why Traditional Sourcing <span>Fails</span></h2>
+
+      <div class="problem-list">
+        <div class="problem-item">
+          <span class="p-num">01</span>
+          <div>
+            <h4>Shallow Keyword Filtering</h4>
+            <p>Legacy ATS systems match on exact words — missing a "Machine Learning Engineer" profile that writes "Deep Learning" and "Neural Networks" instead of "ML". Contextual synonymy is invisible to keyword scanners.</p>
+          </div>
+        </div>
+        <div class="problem-item">
+          <span class="p-num">02</span>
+          <div>
+            <h4>Ignoring Behavioral &amp; Activity Signals</h4>
+            <p>Resumes show what candidates claim, not what they do. Open-source contributions, recent certifications, hackathon wins, GitHub commits, and learning activity are powerful quality signals that go completely unused.</p>
+          </div>
+        </div>
+        <div class="problem-item">
+          <span class="p-num">03</span>
+          <div>
+            <h4>Rigid, Untunable Black-Box Rankings</h4>
+            <p>Recruiters receive a binary yes/no list with no ability to adjust what matters most — for a startup, activity signals outweigh tenure; for an enterprise staff role, career growth trajectory is paramount. No existing tool exposes these controls.</p>
+          </div>
+        </div>
+        <div class="problem-item">
+          <span class="p-num">04</span>
+          <div>
+            <h4>No Explainability — No Trust</h4>
+            <p>When AI gives a score of "82%", recruiters don't know why. Without human-readable reasoning, AI recommendations go ignored. Explainability is not optional — it's the difference between adoption and rejection.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-card">
+          <span class="stat-num">75%</span>
+          <span class="stat-label">of resumes rejected by ATS before human review</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">40hrs</span>
+          <span class="stat-label">average recruiter time per hire (manual screening)</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">60%</span>
+          <span class="stat-label">of hiring managers say shortlists miss top talent</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bar">
+      <span class="footer-brand">TALENTMIND AI</span>
+      <span class="footer-tag">Problem Statement</span>
+    </div>
+    <div class="slide-num">02 / 08</div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 3 — OUR SOLUTION
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-top-bar cyan"></div>
+
+    <div class="slide-body">
+      <div class="slide-label">The Solution</div>
+      <h2 class="section-title">TalentMind AI: <span>Multi-Signal Sourcing Engine</span></h2>
+
+      <div class="pillar-list">
+        <div class="pillar">
+          <div class="pillar-icon" style="background:rgba(99,102,241,0.15);">🧠</div>
+          <div>
+            <h4>Deep Job Understanding via LangChain + NLP Parser</h4>
+            <p>Structured extraction of required skills, preferred skills, soft skills, experience range, seniority level, and industry domain from raw free-text job descriptions. Supports multi-format JD input (paste, upload, or API).</p>
+            <div class="tag-row">
+              <span class="tag indigo">LangChain</span>
+              <span class="tag indigo">Regex Parser</span>
+              <span class="tag indigo">Structured Extraction</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pillar">
+          <div class="pillar-icon" style="background:rgba(6,182,212,0.15);">🔍</div>
+          <div>
+            <h4>Semantic Vector Search — Beyond Keywords</h4>
+            <p>Candidate profiles are embedded using <strong style="color:#c4b5fd">BAAI/bge-large-en-v1.5</strong> Sentence Transformers and stored in ChromaDB. JD embeddings are compared via cosine similarity to surface semantically relevant candidates that would be invisible to keyword filters.</p>
+            <div class="tag-row">
+              <span class="tag cyan">Sentence Transformers</span>
+              <span class="tag cyan">ChromaDB</span>
+              <span class="tag cyan">Cosine Similarity</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pillar">
+          <div class="pillar-icon" style="background:rgba(16,185,129,0.15);">📡</div>
+          <div>
+            <h4>Activity &amp; Behavioral Signal Integration</h4>
+            <p>Beyond static profiles — GitHub commits, LeetCode rankings, open-source PRs, Kaggle medals, recent certifications, and learning hours are all normalized and weighted into the final score, rewarding actively growing candidates.</p>
+            <div class="tag-row">
+              <span class="tag emerald">GitHub Activity</span>
+              <span class="tag emerald">Certification Recency</span>
+              <span class="tag emerald">Career Trajectory</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pillar">
+          <div class="pillar-icon" style="background:rgba(245,158,11,0.15);">💬</div>
+          <div>
+            <h4>Explainable AI — Human-Readable Recruiter Summaries</h4>
+            <p>Every ranked candidate receives a structured XAI summary: specific strengths matched, skill gaps identified, and a clear <em>STRONG HIRE / CONSIDER / PASS</em> recommendation. No black boxes, no guessing.</p>
+            <div class="tag-row">
+              <span class="tag amber">XAI Summaries</span>
+              <span class="tag amber">Strengths &amp; Gaps</span>
+              <span class="tag amber">Hire Recommendations</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bar">
+      <span class="footer-brand">TALENTMIND AI</span>
+      <span class="footer-tag">Solution Overview</span>
+    </div>
+    <div class="slide-num">03 / 08</div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 4 — ARCHITECTURE
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-top-bar green"></div>
+
+    <div class="slide-body">
+      <div class="slide-label">Technical Architecture</div>
+      <h2 class="section-title">System <span>Architecture</span> Overview</h2>
+
+      <div class="arch-diagram">
+        <!-- Row 1: User -->
+        <div style="text-align:center; margin-bottom:20px;">
+          <div style="display:inline-block;background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.4);border-radius:12px;padding:14px 32px;font-size:14px;font-weight:700;color:#a5b4fc;">
+            👤 Recruiter (Web Browser)
+          </div>
+        </div>
+
+        <div class="arch-row" style="justify-content:center;margin-bottom:4px;">
+          <div style="color:var(--text-muted);font-size:11px;text-align:center;">
+            ↕ Next.js 15 + TypeScript + TailwindCSS
+          </div>
+        </div>
+
+        <div class="arch-row">
+          <div class="arch-box ui" style="text-align:center;max-width:280px;margin:0 auto;">
+            🖥️ Frontend (Next.js 15)<br/>
+            <span style="font-size:10px;opacity:0.8;">Interactive Dashboard · Weight Sliders · CSV Export</span>
+          </div>
+        </div>
+
+        <div style="text-align:center;margin:8px 0;color:var(--text-muted);font-size:20px;">↕</div>
+        <div style="text-align:center;margin-bottom:8px;font-size:10px;color:var(--text-muted);">REST API / JSON over HTTP</div>
+
+        <div class="arch-row">
+          <div class="arch-box api" style="text-align:center;max-width:280px;margin:0 auto;">
+            ⚡ Backend (FastAPI + Python)<br/>
+            <span style="font-size:10px;opacity:0.8;">Scoring Engine · Parser · XAI Summarizer</span>
+          </div>
+        </div>
+
+        <div style="text-align:center;margin:12px 0;display:flex;justify-content:center;gap:80px;color:var(--text-muted);">
+          <span>↓</span><span>↓</span>
+        </div>
+
+        <div class="arch-row">
+          <div class="arch-box ai" style="flex:1;text-align:center;">
+            🤖 AI Layer<br/>
+            <span style="font-size:10px;opacity:0.8;">Sentence Transformers<br/>LangChain Parser</span>
+          </div>
+          <div style="width:24px;"></div>
+          <div class="arch-box db" style="flex:1;text-align:center;">
+            🗄️ Data Layer<br/>
+            <span style="font-size:10px;opacity:0.8;">PostgreSQL / SQLite<br/>SQLAlchemy ORM</span>
+          </div>
+        </div>
+
+        <div style="text-align:center;margin:8px 0;color:var(--text-muted);">↓</div>
+
+        <div class="arch-row">
+          <div class="arch-box store" style="text-align:center;max-width:280px;margin:0 auto;">
+            📦 ChromaDB Vector Store<br/>
+            <span style="font-size:10px;opacity:0.8;">BAAI/bge-large-en-v1.5 Embeddings</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tech-grid">
+        <div class="tech-item">
+          <span class="t-icon">⚡</span>
+          <div>
+            <div class="t-name">FastAPI</div>
+            <div class="t-sub">Async Python REST backend</div>
+          </div>
+        </div>
+        <div class="tech-item">
+          <span class="t-icon">⚛️</span>
+          <div>
+            <div class="t-name">Next.js 15 + TypeScript</div>
+            <div class="t-sub">React-based SSR frontend</div>
+          </div>
+        </div>
+        <div class="tech-item">
+          <span class="t-icon">🧬</span>
+          <div>
+            <div class="t-name">Sentence Transformers</div>
+            <div class="t-sub">BAAI/bge-large-en-v1.5</div>
+          </div>
+        </div>
+        <div class="tech-item">
+          <span class="t-icon">🟢</span>
+          <div>
+            <div class="t-name">ChromaDB</div>
+            <div class="t-sub">High-dimensional vector store</div>
+          </div>
+        </div>
+        <div class="tech-item">
+          <span class="t-icon">🐘</span>
+          <div>
+            <div class="t-name">PostgreSQL / SQLite</div>
+            <div class="t-sub">Relational data persistence</div>
+          </div>
+        </div>
+        <div class="tech-item">
+          <span class="t-icon">🐳</span>
+          <div>
+            <div class="t-name">Docker Compose</div>
+            <div class="t-sub">Multi-container orchestration</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bar">
+      <span class="footer-brand">TALENTMIND AI</span>
+      <span class="footer-tag">Architecture</span>
+    </div>
+    <div class="slide-num">04 / 08</div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 5 — SCORING METHODOLOGY
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-top-bar pink"></div>
+
+    <div class="slide-body">
+      <div class="slide-label">Core Algorithm</div>
+      <h2 class="section-title">The Intelligent <span>Ranking Formula</span></h2>
+
+      <div class="formula-box">
+        <span class="formula-highlight">Final Score =</span>
+        0.35 × S<sub>semantic</sub> + 0.20 × S<sub>experience</sub> + 0.15 × S<sub>skills</sub>
+        + 0.10 × S<sub>industry</sub> + 0.10 × S<sub>activity</sub> + 0.10 × S<sub>growth</sub>
+        <br/>
+        <span style="font-size:10px;opacity:0.6;margin-top:8px;display:block;">
+          All weights are normalized (sum = 1.00) and recruiter-tunable via the dashboard UI
+        </span>
+      </div>
+
+      <div class="score-bars">
+        <div class="score-bar-row">
+          <span class="score-bar-label">🔍 Semantic Match</span>
+          <div class="score-bar-track">
+            <div class="score-bar-fill" style="width:35%;background:linear-gradient(90deg,#6366f1,#8b5cf6);"></div>
+          </div>
+          <span class="score-bar-pct" style="color:#a5b4fc;">35%</span>
+        </div>
+        <div class="score-bar-row">
+          <span class="score-bar-label">📅 Experience Match</span>
+          <div class="score-bar-track">
+            <div class="score-bar-fill" style="width:20%;background:linear-gradient(90deg,#06b6d4,#0ea5e9);"></div>
+          </div>
+          <span class="score-bar-pct" style="color:#67e8f9;">20%</span>
+        </div>
+        <div class="score-bar-row">
+          <span class="score-bar-label">🛠️ Skills Overlap</span>
+          <div class="score-bar-track">
+            <div class="score-bar-fill" style="width:15%;background:linear-gradient(90deg,#10b981,#34d399);"></div>
+          </div>
+          <span class="score-bar-pct" style="color:#6ee7b7;">15%</span>
+        </div>
+        <div class="score-bar-row">
+          <span class="score-bar-label">🏭 Industry Domain</span>
+          <div class="score-bar-track">
+            <div class="score-bar-fill" style="width:10%;background:linear-gradient(90deg,#f59e0b,#fbbf24);"></div>
+          </div>
+          <span class="score-bar-pct" style="color:#fcd34d;">10%</span>
+        </div>
+        <div class="score-bar-row">
+          <span class="score-bar-label">⚡ Activity Signals</span>
+          <div class="score-bar-track">
+            <div class="score-bar-fill" style="width:10%;background:linear-gradient(90deg,#ec4899,#f472b6);"></div>
+          </div>
+          <span class="score-bar-pct" style="color:#f9a8d4;">10%</span>
+        </div>
+        <div class="score-bar-row">
+          <span class="score-bar-label">📈 Career Growth</span>
+          <div class="score-bar-track">
+            <div class="score-bar-fill" style="width:10%;background:linear-gradient(90deg,#ef4444,#f97316);"></div>
+          </div>
+          <span class="score-bar-pct" style="color:#fca5a5;">10%</span>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;">
+          <h4 style="font-size:13px;color:var(--text-head);margin-bottom:8px;">🔍 Semantic Score</h4>
+          <p style="font-size:12px;color:var(--text-body);line-height:1.6;">Cosine similarity between 1024-dim vectors of JD text and candidate profile text. Captures conceptual alignment beyond surface keywords.</p>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;">
+          <h4 style="font-size:13px;color:var(--text-head);margin-bottom:8px;">🛠️ Skills Score</h4>
+          <p style="font-size:12px;color:var(--text-body);line-height:1.6;">Weighted Jaccard index: required skills carry 2× weight vs. preferred skills. Partial credit for subset matches.</p>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;">
+          <h4 style="font-size:13px;color:var(--text-head);margin-bottom:8px;">⚡ Activity Score</h4>
+          <p style="font-size:12px;color:var(--text-body);line-height:1.6;">Normalized composite of: GitHub commits, open-source PRs, LeetCode rank, Kaggle medals, certifications &amp; learning hours in past 12 months.</p>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;">
+          <h4 style="font-size:13px;color:var(--text-head);margin-bottom:8px;">📈 Growth Score</h4>
+          <p style="font-size:12px;color:var(--text-body);line-height:1.6;">Career trajectory: company tier promotions (startup → unicorn → FAANG), title seniority progression evaluated over career history.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bar">
+      <span class="footer-brand">TALENTMIND AI</span>
+      <span class="footer-tag">Scoring Methodology</span>
+    </div>
+    <div class="slide-num">05 / 08</div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 6 — DATA PIPELINE & FLOW
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-top-bar amber"></div>
+
+    <div class="slide-body">
+      <div class="slide-label">How It Works</div>
+      <h2 class="section-title">End-to-End <span>Data Pipeline</span></h2>
+
+      <div class="flow" style="gap:4px;flex-wrap:nowrap;">
+        <div class="flow-step">
+          <div class="f-num">Step 01</div>
+          <div class="f-name">📝 Input</div>
+          <div class="f-sub">Job Description uploaded / pasted</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="f-num">Step 02</div>
+          <div class="f-name">🔬 Parse</div>
+          <div class="f-sub">LangChain extracts structured fields</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="f-num">Step 03</div>
+          <div class="f-name">🧬 Embed</div>
+          <div class="f-sub">Sentence Transformers vectorize JD</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="f-num">Step 04</div>
+          <div class="f-name">🔍 Search</div>
+          <div class="f-sub">ChromaDB ANN vector query</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="f-num">Step 05</div>
+          <div class="f-name">📊 Score</div>
+          <div class="f-sub">6-signal weighted ranking</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="f-num">Step 06</div>
+          <div class="f-name">💬 Explain</div>
+          <div class="f-sub">XAI summary + recommendation</div>
+        </div>
+      </div>
+
+      <div class="divider" style="margin: 24px 0;"></div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div>
+          <h3 style="font-size:14px;font-weight:700;color:var(--text-head);margin-bottom:14px;">📡 REST API Endpoints</h3>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-body);background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px;line-height:2;">
+            <span style="color:#6ee7b7;">POST</span>  /api/jobs/upload<br/>
+            <span style="color:#6ee7b7;">POST</span>  /api/candidates/upload<br/>
+            <span style="color:#6366f1;">POST</span>  /api/rank<br/>
+            <span style="color:#fcd34d;">GET</span>   /api/candidates<br/>
+            <span style="color:#fcd34d;">GET</span>   /api/jobs<br/>
+            <span style="color:#fcd34d;">GET</span>   /api/rankings<br/>
+            <span style="color:#fcd34d;">GET</span>   /api/candidate/{id}<br/>
+            <span style="color:#fcd34d;">GET</span>   /api/download/csv<br/>
+            <span style="color:#fcd34d;">GET</span>   /api/download/xlsx
+          </div>
+        </div>
+
+        <div>
+          <h3 style="font-size:14px;font-weight:700;color:var(--text-head);margin-bottom:14px;">🗄️ Data Schema</h3>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;">
+              <div style="font-size:12px;font-weight:700;color:#a5b4fc;margin-bottom:4px;">JOBS</div>
+              <div style="font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;">
+                id · title · description · required_skills · preferred_skills · min_exp · seniority · domain
+              </div>
+            </div>
+            <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;">
+              <div style="font-size:12px;font-weight:700;color:#67e8f9;margin-bottom:4px;">CANDIDATES</div>
+              <div style="font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;">
+                id · name · skills · exp_years · industry · activity_signals · career_growth_score
+              </div>
+            </div>
+            <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;">
+              <div style="font-size:12px;font-weight:700;color:#6ee7b7;margin-bottom:4px;">RANKINGS</div>
+              <div style="font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;">
+                composite_score · semantic · experience · skills · industry · activity · growth · recommendation · summary
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bar">
+      <span class="footer-brand">TALENTMIND AI</span>
+      <span class="footer-tag">Data Pipeline</span>
+    </div>
+    <div class="slide-num">06 / 08</div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 7 — DEMO RESULTS
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-top-bar"></div>
+
+    <div class="slide-body">
+      <div class="slide-label">Live Demo Output</div>
+      <h2 class="section-title">Sample <span>Ranked Shortlist</span></h2>
+
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px;">
+        Job: <strong style="color:var(--text-body);">Senior ML Engineer — NLP &amp; LLMs</strong> &nbsp;|&nbsp;
+        Pool: 200 candidates &nbsp;|&nbsp; Showing top 8
+      </div>
+
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;overflow:hidden;">
+        <table class="result-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Candidate</th>
+              <th>Current Role</th>
+              <th>Exp</th>
+              <th>Score</th>
+              <th>Semantic</th>
+              <th>Activity</th>
+              <th>Verdict</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="rank-badge rank-1">1</span></td>
+              <td><strong style="color:var(--text-head);">Priya Sharma</strong></td>
+              <td style="color:var(--text-muted);font-size:11px;">Staff ML Engr @ Google</td>
+              <td>9 yrs</td>
+              <td><span class="score-pill score-high">94.2</span></td>
+              <td><span style="color:#6ee7b7;">0.91</span></td>
+              <td><span style="color:#6ee7b7;">High</span></td>
+              <td><span class="rec-badge rec-strong">STRONG HIRE</span></td>
+            </tr>
+            <tr>
+              <td><span class="rank-badge rank-2">2</span></td>
+              <td><strong style="color:var(--text-head);">Arjun Mehta</strong></td>
+              <td style="color:var(--text-muted);font-size:11px;">Senior NLP Engr @ OpenAI</td>
+              <td>7 yrs</td>
+              <td><span class="score-pill score-high">91.7</span></td>
+              <td><span style="color:#6ee7b7;">0.88</span></td>
+              <td><span style="color:#6ee7b7;">High</span></td>
+              <td><span class="rec-badge rec-strong">STRONG HIRE</span></td>
+            </tr>
+            <tr>
+              <td><span class="rank-badge rank-3">3</span></td>
+              <td><strong style="color:var(--text-head);">Liu Wei</strong></td>
+              <td style="color:var(--text-muted);font-size:11px;">ML Lead @ Anthropic</td>
+              <td>11 yrs</td>
+              <td><span class="score-pill score-high">89.3</span></td>
+              <td><span style="color:#6ee7b7;">0.85</span></td>
+              <td><span style="color:#fcd34d;">Med</span></td>
+              <td><span class="rec-badge rec-strong">STRONG HIRE</span></td>
+            </tr>
+            <tr>
+              <td><span class="rank-badge rank-n">4</span></td>
+              <td><strong style="color:var(--text-head);">Sara Johansson</strong></td>
+              <td style="color:var(--text-muted);font-size:11px;">Applied Scientist @ AWS</td>
+              <td>6 yrs</td>
+              <td><span class="score-pill score-high">82.1</span></td>
+              <td><span style="color:#6ee7b7;">0.79</span></td>
+              <td><span style="color:#6ee7b7;">High</span></td>
+              <td><span class="rec-badge rec-consider">CONSIDER</span></td>
+            </tr>
+            <tr>
+              <td><span class="rank-badge rank-n">5</span></td>
+              <td><strong style="color:var(--text-head);">Raj Patel</strong></td>
+              <td style="color:var(--text-muted);font-size:11px;">Data Scientist @ Meta</td>
+              <td>5 yrs</td>
+              <td><span class="score-pill score-mid">76.4</span></td>
+              <td><span style="color:#fcd34d;">0.74</span></td>
+              <td><span style="color:#6ee7b7;">High</span></td>
+              <td><span class="rec-badge rec-consider">CONSIDER</span></td>
+            </tr>
+            <tr>
+              <td><span class="rank-badge rank-n">6</span></td>
+              <td><strong style="color:var(--text-head);">Amina Nkosi</strong></td>
+              <td style="color:var(--text-muted);font-size:11px;">Research Engineer @ DeepMind</td>
+              <td>4 yrs</td>
+              <td><span class="score-pill score-mid">71.8</span></td>
+              <td><span style="color:#fcd34d;">0.70</span></td>
+              <td><span style="color:#fcd34d;">Med</span></td>
+              <td><span class="rec-badge rec-consider">CONSIDER</span></td>
+            </tr>
+            <tr>
+              <td><span class="rank-badge rank-n">7</span></td>
+              <td><strong style="color:var(--text-head);">Diego Fernandez</strong></td>
+              <td style="color:var(--text-muted);font-size:11px;">ML Engr @ Startup</td>
+              <td>3 yrs</td>
+              <td><span class="score-pill score-mid">63.2</span></td>
+              <td><span style="color:#fcd34d;">0.61</span></td>
+              <td><span style="color:#fcd34d;">Med</span></td>
+              <td><span class="rec-badge rec-pass">PASS</span></td>
+            </tr>
+            <tr>
+              <td><span class="rank-badge rank-n">8</span></td>
+              <td><strong style="color:var(--text-head);">Mei Chen</strong></td>
+              <td style="color:var(--text-muted);font-size:11px;">Junior Data Engr @ TCS</td>
+              <td>2 yrs</td>
+              <td><span class="score-pill score-low">41.9</span></td>
+              <td><span style="color:#fca5a5;">0.38</span></td>
+              <td><span style="color:#fca5a5;">Low</span></td>
+              <td><span class="rec-badge rec-pass">PASS</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:20px;background:rgba(99,102,241,0.06);border:1px solid rgba(99,102,241,0.2);border-radius:12px;padding:16px 20px;">
+        <strong style="font-size:12px;color:#a5b4fc;">💬 Sample XAI Summary — Priya Sharma:</strong>
+        <p style="font-size:12px;color:var(--text-body);margin-top:6px;line-height:1.7;">
+          <em>"Strong semantic alignment (0.91) with the NLP role — profile includes Transformers, PyTorch, RLHF, and fine-tuning LLMs matching all required skills. 9 years experience comfortably exceeds the 6-year minimum. High GitHub activity (1,200+ commits, 38 open-source PRs). Career growth trajectory: ML Engineer → Staff → Principal. <strong style="color:#6ee7b7;">Strongly recommend for immediate interview.</strong>"</em>
+        </p>
+      </div>
+    </div>
+
+    <div class="footer-bar">
+      <span class="footer-brand">TALENTMIND AI</span>
+      <span class="footer-tag">Demo Results</span>
+    </div>
+    <div class="slide-num">07 / 08</div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 8 — IMPACT & CLOSING
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-top-bar green"></div>
+
+    <div class="slide-body">
+      <div class="slide-label">Business Impact</div>
+      <h2 class="section-title">Why Recruiters <span>Choose TalentMind AI</span></h2>
+
+      <div class="impact-grid" style="margin-bottom:28px;">
+        <div class="impact-card">
+          <span class="i-icon">⚡</span>
+          <span class="i-num">&lt;10ms</span>
+          <div class="i-title">Ranking Latency</div>
+          <div class="i-body">200 candidates ranked and explained in under 10 milliseconds, with instant CSV/Excel export.</div>
+        </div>
+        <div class="impact-card">
+          <span class="i-icon">🎯</span>
+          <span class="i-num">6</span>
+          <div class="i-title">Scoring Signals</div>
+          <div class="i-body">Semantic, experience, skills, industry, activity, and growth — all configurable by the recruiter.</div>
+        </div>
+        <div class="impact-card">
+          <span class="i-icon">💬</span>
+          <span class="i-num">100%</span>
+          <div class="i-title">Explainable</div>
+          <div class="i-body">Every ranking includes a human-readable AI summary with specific evidence — no black boxes.</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:20px 22px;">
+          <h4 style="font-size:13px;font-weight:700;color:var(--text-head);margin-bottom:10px;">🔧 Recruiter Controls</h4>
+          <ul style="font-size:12px;color:var(--text-body);line-height:2;list-style:none;padding:0;">
+            <li>✅ Adjust signal weights with sliders</li>
+            <li>✅ Filter by experience range</li>
+            <li>✅ Sort by any sub-score</li>
+            <li>✅ Export ranked list (CSV / XLSX)</li>
+            <li>✅ View per-candidate XAI reasoning</li>
+          </ul>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:20px 22px;">
+          <h4 style="font-size:13px;font-weight:700;color:var(--text-head);margin-bottom:10px;">🔮 Future Roadmap</h4>
+          <ul style="font-size:12px;color:var(--text-body);line-height:2;list-style:none;padding:0;">
+            <li>🔜 Real-time LinkedIn / GitHub ingestion</li>
+            <li>🔜 GPT-4 generative XAI summaries</li>
+            <li>🔜 Multi-JD batch ranking</li>
+            <li>🔜 Feedback loop & bias detection</li>
+            <li>🔜 Diversity & inclusion scoring layer</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cta-center" style="flex:0;margin-top:auto;">
+        <div style="background:linear-gradient(135deg,rgba(99,102,241,0.1),rgba(139,92,246,0.1));border:1px solid rgba(99,102,241,0.25);border-radius:16px;padding:28px 40px;text-align:center;width:100%;">
+          <div style="font-size:26px;font-weight:900;background:var(--gradient-h);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;">
+            TalentMind AI
+          </div>
+          <div style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">
+            Intelligent Candidate Discovery · Multi-Signal AI Ranking · Explainable Results
+          </div>
+          <div class="repo-link">
+            🔗 &nbsp; github.com/gunmasterg9/talentmind-ai
+          </div>
+          <div style="margin-top:16px;display:flex;justify-content:center;gap:24px;font-size:12px;color:var(--text-muted);">
+            <span>📧 Submission: June 14, 2026</span>
+            <span>·</span>
+            <span>🏷️ Team: TalentMind</span>
+            <span>·</span>
+            <span>🐍 Python + Next.js + AI</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bar">
+      <span class="footer-brand">TALENTMIND AI</span>
+      <span class="footer-tag">Thank You — Data &amp; AI Challenge 2026</span>
+    </div>
+    <div class="slide-num">08 / 08</div>
+  </div>
+
+</div><!-- /deck -->
+
+</body>
+</html>
