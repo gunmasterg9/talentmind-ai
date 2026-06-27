@@ -1,102 +1,78 @@
-# TalentMind AI — Intelligent Candidate Discovery
+# REDROB AI OS — The Autonomous AI Career Operating System
 
-A production-quality AI recruiting, candidate discovery, and multi-signal ranking platform. It understands job descriptions deeply, evaluates candidates semantically, incorporates work history metadata/behavioral signals, and delivers a ranked leaderboard with explainable AI summaries.
+> **Transforming Redrob into an intelligent, AI-native career ecosystem powered by 12 autonomous background agents.**
+
+This is not a traditional CRUD job portal. Redrob is an AI-first SaaS platform where candidates and recruiters delegate continuous career workflows to autonomous AI agents working 24x7 in the background.
 
 ---
 
-## 🏗️ Architecture
+## 🚀 Key Platform Highlights
+
+- **12 Autonomous AI Agents**: Executive, Career Coach, Resume Optimizer, Skill Gap, Job Discovery, Recruiter Suite, Networking, Mock Interview, Learning, Salary Intelligence, Career Forecast agents, and a 24x7 Opportunity Monitor daemon.
+- **Dynamic Multi-Provider AI Engine**: Unified failover supporting OpenAI, Gemini, Claude, local Ollama, Groq, and DeepSeek models with runtime provider switching.
+- **Hybrid Data Architecture**: PostgreSQL for transactional data, Qdrant vector database for semantic match RAG retrieval, and Neo4j Knowledge Graph for skill node dependency mapping.
+- **Modern Dark-Mode Glassmorphism UI**: Built with Next.js 15, React 19, Framer Motion, and Tailwind CSS.
+- **Real-Time Telemetry**: Instant WebSocket & SSE gateways streaming active agent reasoning logs, interview audio analysis, and live market alerts.
+
+---
+
+## 🏗️ System Architecture
 
 ```mermaid
 graph TD
-    User([Recruiter UI]) -->|Next.js 15 App| Frontend[Frontend Web Server]
-    Frontend -->|REST API| Backend[FastAPI Server]
+    User([Candidate / Recruiter UI]) -->|Next.js 15 + WebSockets| Frontend[Frontend Web App]
+    Frontend -->|REST / WS Gateway| Backend[FastAPI Microservices]
     
-    subgraph AI Matching Layer
-        Backend -->|Extract Requirements| Parser[LangChain / Regex Parser]
-        Backend -->|Embed Profiles| Embedder[Sentence Transformers]
-        Embedder -->|Cosine Similarity Query| ChromaDB[(Chroma Vector DB)]
+    subgraph Multi-Agent Orchestration Framework
+        Backend -->|State Collaboration| LangGraph[LangGraph Engine]
+        LangGraph -->|Provider Switching| Providers[OpenAI / Gemini / Claude / Ollama / Groq / DeepSeek]
+        LangGraph -->|12 Agents| Agents[Executive • Resume • Job Discovery • Interview Lab]
     end
 
-    subgraph Data Persistence
+    subgraph Hybrid Persistence & Graph Layer
         Backend -->|ORM Queries| PostgreSQL[(PostgreSQL / SQLite)]
+        Backend -->|Semantic RAG| Qdrant[(Qdrant Vector DB)]
+        Backend -->|Skill & Network Nodes| Neo4j[(Neo4j Knowledge Graph)]
+        Backend -->|Caching & Queues| Redis[(Redis Caching)]
     end
 ```
 
 ---
 
-## 📊 Entity Relationship (ER) Diagram
+## 🤖 12 Autonomous AI Agents Breakdown
 
-```mermaid
-erDiagram
-    JOBS {
-        int id PK
-        string job_id UK
-        string title
-        text description
-        text required_skills
-        text preferred_skills
-        text soft_skills
-        int min_exp_years
-        int preferred_exp_years
-        string seniority_level
-        string industry_domain
-        datetime created_at
-    }
-    
-    CANDIDATES {
-        int id PK
-        string candidate_id UK
-        string name
-        string email UK
-        string current_title
-        string current_company
-        float total_exp_years
-        text skills
-        text education
-        text certifications
-        text projects
-        string industry_experience
-        text activity_signals
-        float career_growth_score
-        float engagement_score
-        string location
-        float expected_ctc_lpa
-        datetime created_at
-    }
-    
-    RANKINGS {
-        int id PK
-        string job_id FK
-        string candidate_id FK
-        float composite_score
-        float semantic_fit_score
-        float experience_score
-        float skills_score
-        float industry_score
-        float activity_score
-        float growth_score
-        text strengths
-        text weaknesses
-        string recommendation
-        text summary
-        datetime created_at
-    }
-```
+| Agent | Responsibility |
+| :--- | :--- |
+| **Executive Agent** | Orchestrates global workflows, assigns career goals, and maintains long-term user memory. |
+| **Career Coach Agent** | Generates 12-month career roadmaps and predicts long-term trajectory milestones. |
+| **Resume Agent** | Real-time ATS scoring, keyword optimization, and bullet point rewriting engine. |
+| **Skill Gap Agent** | Compares profile against target roles and detects missing skill proficiencies. |
+| **Job Discovery Agent** | Scans thousands of connected job portals and auto-saves top matched opportunities. |
+| **Recruiter Agent** | Multi-signal candidate ranking, resume scoring, and hiring analytics. |
+| **Networking Agent** | Suggests mentors, peers, alumni, and recruiters based on graph node connections. |
+| **Interview Agent** | Simulates voice, coding, and behavioral mock interviews with sentiment analysis. |
+| **Learning Agent** | Curates personalized course roadmaps, YouTube tutorials, and gamified XP tracking. |
+| **Salary Intelligence Agent** | Predicts salary benchmarks and provides personalized negotiation scripts. |
+| **Career Forecast Agent** | Simulates promotion odds, job switch windows, and skill resilience indexes. |
+| **Opportunity Monitor (24x7)** | Background daemon scanning hackathons, freelance contracts, and urgent jobs. |
 
 ---
 
-## 📡 API Documentation
+## 📡 Key API Documentation
 
 | Endpoint | Method | Description |
-|---|---|---|
-| `/api/jobs/upload` | `POST` | Upload and parse job description text |
-| `/api/candidates/upload` | `POST` | Upload and seed candidate profiles CSV |
-| `/api/rank` | `POST` | Rank candidate pool against job description with weights tuning |
-| `/api/candidates` | `GET` | Get all candidates list |
-| `/api/jobs` | `GET` | Get all job roles |
-| `/api/rankings` | `GET` | Get current ranking matrix |
-| `/api/candidate/{id}` | `GET` | Get detailed candidate profile and ranking history |
-| `/api/download/{format}`| `GET` | Export current ranked leaderboard in `csv` or `xlsx` format |
+| :--- | :--- | :--- |
+| `/api/agents/chat` | `POST` | Interactive agent chat with multi-provider LLM selection |
+| `/api/agents/orchestrate` | `POST` | Execute full executive onboarding career workflow |
+| `/api/agents/opportunity-monitor`| `GET` | Sweep global portals for hackathons, freelance, and jobs |
+| `/api/agents/interview/evaluate` | `POST` | Evaluate candidate mock interview answers for sentiment & clarity |
+| `/api/agents/salary-intelligence` | `GET` | Compute median benchmarks and generate negotiation scripts |
+| `/api/agents/forecast` | `GET` | Predict promotion probability and skill demand decay |
+| `/api/dashboard/candidate` | `GET` | Candidate HQ telemetry, career score, and active applications |
+| `/api/dashboard/recruiter` | `GET` | Candidate semantic search, AI match ranking, and heatmap |
+| `/api/graph/candidate/{id}` | `GET` | Retrieve candidate Neo4j skill graph nodes and links |
+| `/api/vector/search` | `GET` | Perform semantic vector job queries |
+| `/api/ws` | `WebSocket` | Real-time agent thought streaming and notification gateway |
 
 ---
 
@@ -104,56 +80,52 @@ erDiagram
 
 ### Option 1: Docker Compose (Recommended)
 
-1. Clone or navigate to the directory:
+1. Clone and navigate to the repository:
    ```bash
+   git clone https://github.com/gunmasterg9/talentmind-ai.git
    cd talentmind-ai
    ```
-2. Build and run containers (FastAPI, Next.js, PostgreSQL, ChromaDB):
+2. Build and run multi-container architecture (FastAPI, Next.js, PostgreSQL, Redis, Qdrant):
    ```bash
    docker-compose up --build
    ```
-3. Seed sample data:
-   * Execute seed command inside backend container:
-     ```bash
-     docker exec -it talentmind-backend python data/seed.py
-     ```
-4. Access App:
-   * **Web UI**: `http://localhost:3000`
-   * **API Docs**: `http://localhost:8000/docs`
+3. Access Platform:
+   - **Web Application**: `http://localhost:3000`
+   - **Interactive API Swagger Docs**: `http://localhost:8000/docs`
 
 ---
 
-### Option 2: Local Host Development Run
+### Option 2: One-Click Local Launcher (Windows)
 
-#### Backend Setup
-1. Navigate to backend:
-   ```bash
-   cd backend
-   ```
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Run migrations and seed data:
-   ```bash
-   python data/seed.py
-   ```
-4. Start server:
-   ```bash
-   uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-   ```
+Simply run the batch script or python launcher:
+```cmd
+run.bat
+```
+*or*
+```bash
+python run_local.py
+```
+This script automatically checks ports, seeds initial candidate datasets, and concurrently launches FastAPI and Next.js.
 
-#### Frontend Setup
-1. Navigate to frontend:
-   ```bash
-   cd frontend
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Run Next.js:
-   ```bash
-   npm run dev
-   ```
-4. Open your browser and navigate to `http://localhost:3000`.
+---
+
+## 🧪 Testing & Verification
+
+Run Pytest suite for agent orchestration and database models:
+```bash
+cd backend
+python -m pytest tests/
+```
+
+Run TypeScript build validation for frontend:
+```bash
+cd frontend
+npm run build
+```
+
+---
+
+## 📄 Presentation Deck & Artifacts
+
+- **Presentation Deck PDF**: Outlining architectural approach, design philosophy, and technical workflows: [docs/Redrob_Autonomous_AI_Career_OS_Deck.pdf](docs/Redrob_Autonomous_AI_Career_OS_Deck.pdf).
+- **Exported Candidate Rankings**: Download sample ranked candidates in Excel format at [outputs/ranked_candidates.xlsx](outputs/ranked_candidates.xlsx).
